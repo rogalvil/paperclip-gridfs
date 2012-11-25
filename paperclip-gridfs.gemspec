@@ -3,12 +3,13 @@ $LOAD_PATH << File.join(File.dirname(__FILE__), 'lib')
 require 'paperclip-gridfs/version'
 
 spec = Gem::Specification.new do |s|
-  s.name          = "paperclip-gridfs"
+  s.name          = 'paperclip-gridfs'
   s.version       = Paperclip::GridFS::VERSION
-  s.authors       = ["Blaž Hrastnik"]
-  s.email         = "blaz.hrast@gmail.com"
-  s.homepage      = "https://github.com/archSeer/paperclip-gridfs"
-  s.description   = "Paperclip extension to support GridFS"
+  s.authors       = ['Blaž Hrastnik']
+  s.email         = 'blaz.hrast@gmail.com'
+  s.homepage      = 'https://github.com/archSeer/paperclip-gridfs'
+  s.description   = 'Paperclip extension to make it support GridFS'
+  s.summary       = 'Paperclip GridFS support'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
