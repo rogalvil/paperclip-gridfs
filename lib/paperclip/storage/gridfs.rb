@@ -73,7 +73,7 @@ module Paperclip
       
       def get_database_connection creds
         return creds[:database] if creds[:database].is_a? Mongo::DB
-        db = Mongo::Connection.new(creds[:host] || "localhost", creds[:port] || Mongo::Connection::DEFAULT_PORT).db(creds[:database])
+        db = Mongo::Connection.new(creds[:host] || Mongo::Connection::DEFAULT_HOST, creds[:port] || Mongo::Connection::DEFAULT_PORT).db(creds[:database])
         db.authenticate(creds[:username], creds[:password]) if creds[:username] && creds[:password]
         return db
       end
