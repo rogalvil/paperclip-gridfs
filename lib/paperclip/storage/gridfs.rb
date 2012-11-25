@@ -49,8 +49,7 @@ module Paperclip
       def exists?(style = default_style)
         if original_filename
           @gridfs = Mongo::GridFileSystem.new(connection)
-          val = @gridfs.open(path(style), "r") rescue nil
-          !val.nil?
+          @gridfs.exist?(:filename => path(style))
         else
           false
         end
@@ -111,7 +110,7 @@ module Paperclip
         case creds
         when File
           YAML::load(ERB.new(File.read(creds.path)).result)
-        when String
+        when String, Pathname
           YAML::load(ERB.new(File.read(creds)).result)
         when Hash
           creds
