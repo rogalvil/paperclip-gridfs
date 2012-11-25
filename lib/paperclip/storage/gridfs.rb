@@ -67,23 +67,15 @@ module Paperclip
             }) { |f|
             f.write file.read
           }
-          file.close
-          File.unlink(file.path)
         end
+        after_flush_writes # allows attachment to clean up temp files
         @queued_for_write = {}
       end
 
       def flush_deletes #:nodoc:
         @queued_for_delete.each do |path|
-          begin
-            log("deleting #{path}")
-            val = @gridfs.open(path, "r") rescue nil
-            if !val.nil?
-              @gridfs.delete(path)
-            end
-          rescue Errno::ENOENT => e
-            # ignore file-not-found, let everything else pass
-          end
+          log("deleting #{path}")
+          @gridfs.delete(path)
         end
         @queued_for_delete = []
       end
