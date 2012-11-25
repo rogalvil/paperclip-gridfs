@@ -20,5 +20,6 @@ spec = Gem::Specification.new do |s|
   #s.extra_rdoc_files  = Dir["README*"]
   #s.rdoc_options << '--line-numbers' << '--inline-source'
 
+  s.add_dependency 'paperclip'
   s.add_dependency 'mongo', '>=1.1.4'
 end

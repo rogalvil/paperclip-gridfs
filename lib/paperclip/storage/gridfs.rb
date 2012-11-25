@@ -15,6 +15,7 @@ module Paperclip
     # within the database rather than the file system, you'll need to work out a method
     # to extract the file data to serve it over HTTP. This is pretty trivial using
     # Rails Metal.
+
     module Gridfs
       def self.extended base
         begin
