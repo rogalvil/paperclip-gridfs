@@ -28,6 +28,7 @@ module Paperclip
         base.instance_eval do
           @gridfs_options = parse_credentials(@options[:gridfs])
           @gridfs_db      = Paperclip::Storage::Gridfs.gridfs_connections(@gridfs_options)
+          @gridfs         = Mongo::GridFileSystem.new(connection)
         end
       end
       
@@ -48,7 +49,6 @@ module Paperclip
       
       def exists?(style = default_style)
         if original_filename
-          @gridfs = Mongo::GridFileSystem.new(connection)
           !!@gridfs.exist?(:filename => path(style))
         else
           false
@@ -64,7 +64,6 @@ module Paperclip
       def flush_writes #:nodoc:
         @queued_for_write.each do |style, file|          
           log("saving #{path(style)}")
-          @gridfs = Mongo::GridFileSystem.new(connection)
           @gridfs.open(path(style), 'w', {
               :content_type => content_type,
               :metadata => { 'instance_id' => instance.id },
@@ -82,7 +81,6 @@ module Paperclip
         @queued_for_delete.each do |path|
           begin
             log("deleting #{path}")
-            @gridfs = Mongo::GridFileSystem.new(connection)
             val = @gridfs.open(path, "r") rescue nil
             if !val.nil?
               @gridfs.delete(path)
