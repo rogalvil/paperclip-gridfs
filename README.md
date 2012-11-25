@@ -13,7 +13,7 @@ class User
   include MongoMapper::Document
   include Paperclip::Glue
 
-  attr_accessor :avatar
+  key :avatar_file_name, String
   has_attached_file :avatar, :storage => :gridfs, :database => 'avatars'
 end
 
@@ -23,6 +23,6 @@ class User
   include MongoMapper::Document
   include Paperclip::Glue
 
-  attr_accessor :avatar
+  key :avatar_file_name, String
   has_attached_file :avatar, :storage => :gridfs, :database => MongoMapper.database
 end
