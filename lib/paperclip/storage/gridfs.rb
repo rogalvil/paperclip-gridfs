@@ -45,8 +45,7 @@ module Paperclip
         end
       end
       
-      # Returns representation of the data of the file assigned to the given
-      # style, in the format most representative of the current storage.
+      # Returns a binary representation of the data of the file assigned to the given style
       def to_file style = default_style
         @queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
       end
