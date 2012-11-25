@@ -27,16 +27,11 @@ module Paperclip
                 
         base.instance_eval do
           @gridfs_options    = parse_credentials(@options[:gridfs])
-          @gridfs_connection = Paperclip::Storage::Gridfs.gridfs_connections(@gridfs_options)
+          @gridfs_connection = get_database_connection(@gridfs_options)
           @gridfs            = Mongo::GridFileSystem.new(@gridfs_connection)
         end
       end
-      
-      def self.gridfs_connections creds
-        @connections ||= {}
-        @connections[creds] ||= get_database_connection(creds)
-      end
-      
+
       def parse_credentials creds
         creds = find_credentials(creds).stringify_keys
         env = Object.const_defined?(:Rails) ? Rails.env : nil
