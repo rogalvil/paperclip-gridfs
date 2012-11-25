@@ -60,13 +60,9 @@ module Paperclip
       def flush_writes #:nodoc:
         @queued_for_write.each do |style, file|          
           log("saving #{path(style)}")
-          @gridfs.open(path(style), 'w', {
-              :content_type => content_type,
-              :metadata => { 'instance_id' => instance.id },
-              :chunk_size => 4.kilobytes
-            }) { |f|
-            f.write file.read
-          }
+          @gridfs.open(path(style), 'w', :content_type => content_type) do |f| 
+            f.write file.read 
+          end
         end
         after_flush_writes # allows attachment to clean up temp files
         @queued_for_write = {}
