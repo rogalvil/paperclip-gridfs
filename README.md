@@ -1,7 +1,7 @@
 paperclip-gridfs
 ================
 
-A fork of gmontard/paperclip-gridfs, however no fork reference was wanted to thoughtbot/paperclip
+A fork of gmontard/paperclip-gridfs (which was apparently a fork of kristianmandrup/paperclip), however no fork reference was wanted to thoughtbot/paperclip
 
 ## Usage
 
