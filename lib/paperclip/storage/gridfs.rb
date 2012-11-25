@@ -24,10 +24,9 @@ module Paperclip
           e.message << " (You may need to install the mongo gem)"
           raise e
         end
-                
+      
         base.instance_eval do
-          @gridfs_options    = parse_credentials(@options[:gridfs])
-          @gridfs_connection = get_database_connection(@gridfs_options)
+          @gridfs_connection = get_database_connection(parse_credentials(@options[:gridfs]))
           @gridfs            = Mongo::GridFileSystem.new(@gridfs_connection)
         end
       end
@@ -38,14 +37,14 @@ module Paperclip
         (creds[env] || creds).symbolize_keys
       end
       
-      def exists?(style = default_style)
+      def exists? style = default_style
         if original_filename
           !!@gridfs.exist?(:filename => path(style))
         else
           false
         end
       end
-          
+      
       # Returns representation of the data of the file assigned to the given
       # style, in the format most representative of the current storage.
       def to_file style = default_style
@@ -53,10 +52,10 @@ module Paperclip
       end
 
       def flush_writes #:nodoc:
-        @queued_for_write.each do |style, file|          
+        @queued_for_write.each do |style, file|
           log("saving #{path(style)}")
-          @gridfs.open(path(style), 'w', :content_type => content_type) do |f| 
-            f.write file.read 
+          @gridfs.open(path(style), 'w', :content_type => content_type) do |f|
+            f.write file.read
           end
         end
         after_flush_writes # allows attachment to clean up temp files
@@ -70,17 +69,14 @@ module Paperclip
         end
         @queued_for_delete = []
       end
+
+      private
       
-      def self.get_database_connection creds
-        case creds[:database]
-        when Mongo::DB then creds[:database]
-        else
-          returning Mongo::Connection.new(creds[:host] || "localhost", creds[:port] || Mongo::Connection::DEFAULT_PORT).db(creds[:database]) do |db|
-            if creds[:username] && creds[:password]
-              auth = db.authenticate creds[:username], creds[:password]
-            end
-          end
-        end
+      def get_database_connection creds
+        return creds[:database] if creds[:database].is_a? Mongo::DB
+        db = Mongo::Connection.new(creds[:host] || "localhost", creds[:port] || Mongo::Connection::DEFAULT_PORT).db(creds[:database])
+        db.authenticate(creds[:username], creds[:password]) if creds[:username] && creds[:password]
+        return db
       end
 
       def find_credentials creds
@@ -95,7 +91,6 @@ module Paperclip
           raise ArgumentError, "Credentials are not a path, file or hash."
         end
       end
-      private :find_credentials
     end
   end
 end
