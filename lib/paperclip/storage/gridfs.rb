@@ -49,7 +49,7 @@ module Paperclip
       def exists?(style = default_style)
         if original_filename
           @gridfs = Mongo::GridFileSystem.new(connection)
-          @gridfs.exist?(:filename => path(style))
+          !!@gridfs.exist?(:filename => path(style))
         else
           false
         end
