@@ -26,19 +26,15 @@ module Paperclip
         end
                 
         base.instance_eval do
-          @gridfs_options = parse_credentials(@options[:gridfs])
-          @gridfs_db      = Paperclip::Storage::Gridfs.gridfs_connections(@gridfs_options)
-          @gridfs         = Mongo::GridFileSystem.new(connection)
+          @gridfs_options    = parse_credentials(@options[:gridfs])
+          @gridfs_connection = Paperclip::Storage::Gridfs.gridfs_connections(@gridfs_options)
+          @gridfs            = Mongo::GridFileSystem.new(@gridfs_connection)
         end
       end
       
       def self.gridfs_connections creds
         @connections ||= {}
         @connections[creds] ||= get_database_connection(creds)
-      end
-      
-      def connection
-        @gridfs_db
       end
       
       def parse_credentials creds
@@ -58,7 +54,7 @@ module Paperclip
       # Returns representation of the data of the file assigned to the given
       # style, in the format most representative of the current storage.
       def to_file style = default_style
-        @queued_for_write[style] || (Mongo::GridFileSystem.new(connection).open(path(style), 'r') if exists?(style))
+        @queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
       end
 
       def flush_writes #:nodoc:
