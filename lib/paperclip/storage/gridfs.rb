@@ -65,6 +65,7 @@ module Paperclip
       def flush_writes #:nodoc:
         @queued_for_write.each do |style, file|          
           log("saving #{path(style)}")
+          puts "Test #{connection.inspect} #{style.inspect}"
           @gridfs = Mongo::GridFileSystem.new(connection)
           @gridfs.open(path(style), 'w', {
               :content_type => content_type,

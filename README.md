@@ -12,6 +12,8 @@ Creating a connection looks something like this:
 class User
   include MongoMapper::Document
   include Paperclip::Glue
+
+  attr_accessor :avatar
   has_attached_file :avatar, :storage => :gridfs, :database => 'avatars'
 end
 
@@ -20,5 +22,7 @@ When you already have a Mongo connection object (for example through Mongoid or 
 class User
   include MongoMapper::Document
   include Paperclip::Glue
+
+  attr_accessor :avatar
   has_attached_file :avatar, :storage => :gridfs, :database => MongoMapper.database
 end
