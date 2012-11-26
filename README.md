@@ -15,7 +15,7 @@ Creating a connection looks something like this:
 
       key :avatar_file_name, String
       key :avatar_content_type, String
-      has_attached_file :avatar, :storage => :gridfs, :gridfs => {:database => 'avatars'}, :path => "avatars/:style/:filename", :url => "/avatars/:style/:filename"
+      has_attached_file :avatar, :storage => :gridfs, :gridfs => {:database => 'avatars', :host => 'test.com'}, :path => "avatars/:style/:filename", :url => "/avatars/:style/:filename"
     end
 
 When you already have a Mongo connection object (for example through Mongoid or MongoMapper) you can also reuse this connection:
