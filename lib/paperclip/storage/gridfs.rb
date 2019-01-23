@@ -63,7 +63,7 @@ module Paperclip
 
       #def to_file style = default_style
         #@queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
-        @queued_for_write[style] || (@gridfs.open(local_dest_path, 'r')
+        @queued_for_write[style] || (@gridfs.open(local_dest_path, 'r'))
         #@queued_for_write[style] ||
         #(local_dest_path.blank? ?
         #  ::Paperclip::Tempfile.new(original_filename).tap do |tf|
