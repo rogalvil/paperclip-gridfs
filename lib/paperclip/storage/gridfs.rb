@@ -47,6 +47,18 @@ module Paperclip
 
       # Returns a binary representation of the data of the file assigned to the given style
       def copy_to_local_file style = default_style, local_dest_path = nil
+        puts "copy_to_local_file\n"
+        puts "style\n"
+        puts style
+        puts "local_dest_path\n"
+        puts local_dest_path
+        puts "original_filename\n"
+        puts original_filename
+
+        puts "@gridfs\n"
+        puts @gridfs
+        puts "\n\n"
+
       #def to_file style = default_style
         @queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
         #@queued_for_write[style] ||
