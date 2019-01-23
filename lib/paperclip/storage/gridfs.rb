@@ -50,12 +50,14 @@ module Paperclip
         puts "copy_to_local_file\n"
         puts "style\n"
         puts style
-        puts "local_dest_path\n"
+        puts "\npath\n"
+        puts path
+        puts "\nlocal_dest_path\n"
         puts local_dest_path
-        puts "original_filename\n"
+        puts "\noriginal_filename\n"
         puts original_filename
 
-        puts "@gridfs\n"
+        puts "\n@gridfs\n"
         puts @gridfs
         puts "\n\n"
 
