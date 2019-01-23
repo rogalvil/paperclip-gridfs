@@ -24,7 +24,7 @@ module Paperclip
           e.message << " (You may need to install the mongo gem)"
           raise e
         end
-      
+
         base.instance_eval do
           @gridfs_connection = get_database_connection(parse_credentials(@options[:gridfs]))
           @gridfs            = Mongo::GridFileSystem.new(@gridfs_connection)
@@ -36,7 +36,7 @@ module Paperclip
         env = Object.const_defined?(:Rails) ? Rails.env : nil
         (creds[env] || creds).symbolize_keys
       end
-      
+
       def exists? style = default_style
         if original_filename
           !!@gridfs.exist?(:filename => path(style))
@@ -44,10 +44,27 @@ module Paperclip
           false
         end
       end
-      
+
       # Returns a binary representation of the data of the file assigned to the given style
-      def to_file style = default_style
+      def copy_to_local_file style = default_style, local_dest_path = nil
+      #def to_file style = default_style
         @queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
+        #@queued_for_write[style] ||
+        #(local_dest_path.blank? ?
+        #  ::Paperclip::Tempfile.new(original_filename).tap do |tf|
+        #    tf.binmode
+        #    tf.write(@gridfs[path(style)].data)
+        #    tf.close
+        #  end :
+        #  ::File.open(local_dest_path, 'wb').tap do |tf|
+        #    begin
+        #      tf.write(@gridfs[path(style)].data)
+        #    rescue
+        #      Rails.logger.info "[Paperclip] Failed reading #{path(style)}"
+        #    end
+        #    tf.close
+        #  end)
+
       end
 
       def flush_writes #:nodoc:
@@ -70,7 +87,7 @@ module Paperclip
       end
 
       private
-      
+
       def get_database_connection creds
         return creds[:database] if creds[:database].is_a? Mongo::DB
         db = Mongo::MongoClient.new(creds[:host], creds[:port]).db(creds[:database])
