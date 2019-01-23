@@ -1,5 +1,5 @@
 module Paperclip
   module GridFS
-    VERSION = "1.102" unless defined? Paperclip::GridFS::VERSION
+    VERSION = "1.103" unless defined? Paperclip::GridFS::VERSION
   end
 end
