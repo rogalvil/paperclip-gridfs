@@ -46,7 +46,8 @@ module Paperclip
       end
 
       # Returns a binary representation of the data of the file assigned to the given style
-      def copy_to_local_file style = default_style, local_dest_path = nil
+      def copy_to_local_file(style, local_dest_path)
+        #FileUtils.cp(path(style), local_dest_path)
         puts "copy_to_local_file\n"
         puts "style\n"
         puts style
@@ -56,14 +57,56 @@ module Paperclip
         puts local_dest_path
         puts "\noriginal_filename\n"
         puts original_filename
-
         puts "\n@gridfs\n"
         puts @gridfs
         puts "\n\n"
 
+        @queued_for_write[style] ||
+        (local_dest_path.blank? ?
+          ::Paperclip::Tempfile.new(original_filename).tap do |tf|
+            tf.binmode
+            tf.write(@gridfs[path(style)].data)
+            tf.close
+          end
+        :
+        @file = File.open(local_dest_path, 'wb')
+        @gridfs.open(original_filename, 'w') do |f|
+          f.write @file
+        end
+        #::File.open(local_dest_path, 'wb').tap do |tf|
+        #  begin
+        #    tf.write(@gridfs[path(style)].data)
+        #  rescue
+        #    Rails.logger.info "[Paperclip] Failed reading #{path(style)}"
+        #  end
+        #  tf.close
+        #end
+        )
+      end
+
+      def copy_to_local_file2 style = default_style, local_dest_path = nil
+
+
       #def to_file style = default_style
         #@queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
-        @queued_for_write[style] || (@gridfs.open(local_dest_path, 'r'))
+        @queued_for_write[style] ||
+        (local_dest_path.blank? ?
+          ::Paperclip::Tempfile.new(original_filename).tap do |tf|
+            tf.binmode
+            tf.write(@gridfs[path(style)].data)
+            tf.close
+          end
+        :
+        ::File.open(local_dest_path, 'wb').tap do |tf|
+          begin
+            tf.write(@gridfs[path(style)].data)
+          rescue
+            Rails.logger.info "[Paperclip] Failed reading #{path(style)}"
+          end
+          tf.close
+        end
+        )
+        #(@gridfs.open(local_dest_path, 'r'))
         #@queued_for_write[style] ||
         #(local_dest_path.blank? ?
         #  ::Paperclip::Tempfile.new(original_filename).tap do |tf|
