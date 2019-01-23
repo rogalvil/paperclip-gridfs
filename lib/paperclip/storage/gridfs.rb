@@ -69,7 +69,7 @@ module Paperclip
             tf.close
           end
         :
-        @file = File.open(local_dest_path, 'wb')
+        @file = File.open(path(style), 'wb')
         @gridfs.open(original_filename, 'w') do |f|
           f.write @file
         end
