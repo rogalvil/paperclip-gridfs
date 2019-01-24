@@ -63,9 +63,9 @@ module Paperclip
         #@queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
         @queued_for_write[style] ||
         (local_dest_path.blank? ?
-          ::Paperclip::Tempfile.new("#{style}/#{original_filename}").tap do |tf|
+          ::Paperclip::Tempfile.new(original_filename).tap do |tf|
             tf.binmode
-            tf.write(@gridfs.open(path(style), 'r'))
+            tf.write(@gridfs.open("#{style}/#{original_filename}", 'r'))
             tf.close
           end
         :
@@ -74,7 +74,7 @@ module Paperclip
         #end
         ::File.open(local_dest_path, 'wb').tap do |tf|
           begin
-            tf.write(@gridfs.open(path(style), 'r'))
+            tf.write(@gridfs.open("#{style}/#{original_filename}", 'r'))
           rescue
             Rails.logger.info "[Paperclip] Failed reading #{path(style)}"
           end
