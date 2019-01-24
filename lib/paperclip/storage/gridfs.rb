@@ -63,7 +63,7 @@ module Paperclip
         #@queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
         @queued_for_write[style] ||
         (local_dest_path.blank? ?
-          ::Paperclip::Tempfile.new(original_filename).tap do |tf|
+          ::Paperclip::Tempfile.new("#{style}/#{original_filename}").tap do |tf|
             tf.binmode
             tf.write(@gridfs.open(path(style), 'r'))
             tf.close
@@ -132,11 +132,11 @@ module Paperclip
           #FileUtils.mkdir_p(File.dirname(path(style)))
 
 
-          puts "style\n #{style} \npath\n #{path} \n"
+          #puts "style\n #{style} \npath\n #{path} \n"
 
           puts "path #{path(style)} \n"
-          puts "file #{file.inspect}\n"
-          #puts "file.read #{file.read}\n"
+          #puts "file #{file.inspect}\n"
+          puts "original_filename #{original_filename}\n"
 
           log("saving #{path(style)}")
           begin
@@ -146,7 +146,7 @@ module Paperclip
             @file = File.open(file.path)
 
 
-            @gridfs.open(path(style), 'w', :content_type => content_type) do |f|
+            @gridfs.open("#{style}/#{original_filename}", 'w', :content_type => content_type) do |f|
               puts "f #{f}\n"
               #f.write file.read
               f.write @file
