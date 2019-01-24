@@ -130,17 +130,27 @@ module Paperclip
 
 
         @queued_for_write.each do |style, file|
+          #FileUtils.mkdir_p(File.dirname(path(style)))
+
+
           puts "style\n #{style} \npath\n #{path} \n"
 
           puts "path #{path(style)} \n"
-          puts "file #{file}\n"
-          puts "file.read #{file.read}\n"
+          puts "file #{file.inspect}\n"
+          #puts "file.read #{file.read}\n"
 
           log("saving #{path(style)}")
           begin
+
+            #move_file(file.path, path(style))
+
+            @file = File.open(file.path)
+
+
             @gridfs.open(path(style), 'w', :content_type => content_type) do |f|
               puts "f #{f}\n"
-              f.write file.read
+              #f.write file.read
+              f.write @file
             end
           rescue
             Rails.logger.info "[Paperclip] Failed saving #{path(style)}"
