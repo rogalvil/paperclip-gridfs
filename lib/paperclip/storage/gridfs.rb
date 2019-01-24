@@ -60,19 +60,20 @@ module Paperclip
         puts "\n@gridfs\n"
         puts @gridfs
         puts "\n\n"
+        @queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
 
-        @queued_for_write[style] ||
-        (local_dest_path.blank? ?
-          ::Paperclip::Tempfile.new(original_filename).tap do |tf|
-            tf.binmode
-            tf.write(@gridfs[path(style)].data)
-            tf.close
-          end
-        :
-        @file = File.open(path(style), 'wb')
-        @gridfs.open(original_filename, 'r') do |f|
-          f.write @file
-        end
+        #@queued_for_write[style] ||
+        #(local_dest_path.blank? ?
+        #  ::Paperclip::Tempfile.new(original_filename).tap do |tf|
+        #    tf.binmode
+        #    tf.write(@gridfs[path(style)].data)
+        #    tf.close
+        #  end
+        #:
+        #@file = File.open(path(style), 'wb')
+        #@gridfs.open(original_filename, 'r') do |f|
+        #  f.write @file
+        #end
         #::File.open(local_dest_path, 'wb').tap do |tf|
         #  begin
         #    tf.write(@gridfs[path(style)].data)
