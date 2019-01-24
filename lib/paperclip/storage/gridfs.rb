@@ -131,8 +131,8 @@ module Paperclip
 
         @queued_for_write.each do |style, file|
 
-          puts ("path #{path(style)} #{style} \n"
-          puts ("file #{file}\n"
+          puts "path #{path(style)} #{style} \n"
+          puts "file #{file}\n"
 
           log("saving #{path(style)}")
           begin
