@@ -127,11 +127,12 @@ module Paperclip
 
       def flush_writes #:nodoc:
         puts "flush_writes\n"
-        puts "style\n #{style} \npath\n #{path} \n"
+
 
         @queued_for_write.each do |style, file|
+          puts "style\n #{style} \npath\n #{path} \n"
 
-          puts "path #{path(style)} #{style} \n"
+          puts "path #{path(style)} \n"
           puts "file #{file}\n"
 
           log("saving #{path(style)}")
