@@ -134,10 +134,12 @@ module Paperclip
 
           puts "path #{path(style)} \n"
           puts "file #{file}\n"
+          puts "file.read #{file.read}\n"
 
           log("saving #{path(style)}")
           begin
             @gridfs.open(path(style), 'w', :content_type => content_type) do |f|
+              puts "f #{f}\n"
               f.write file.read
             end
           rescue
