@@ -135,10 +135,14 @@ module Paperclip
           puts ("file #{file}\n"
 
           log("saving #{path(style)}")
-
-          @gridfs.open(path(style), 'w', :content_type => content_type) do |f|
-            f.write file.read
+          begin
+            @gridfs.open(path(style), 'w', :content_type => content_type) do |f|
+              f.write file.read
+            end
+          rescue
+            Rails.logger.info "[Paperclip] Failed saving #{path(style)}"
           end
+
         end
         after_flush_writes # allows attachment to clean up temp files
         @queued_for_write = {}
