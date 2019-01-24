@@ -72,7 +72,7 @@ module Paperclip
         #@gridfs.open(path(style), 'r') do |f|
         #  f.read
         #end
-        :File.open(local_dest_path, 'wb').tap do |tf|
+        ::File.open(local_dest_path, 'wb').tap do |tf|
           begin
             tf.write(@gridfs.open(path(style), 'r'))
           rescue
