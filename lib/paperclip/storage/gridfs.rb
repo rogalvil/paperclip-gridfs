@@ -60,7 +60,7 @@ module Paperclip
         puts "\n@gridfs\n"
         puts @gridfs
         puts "\n\n"
-        @queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
+        @queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style)
 
         #@queued_for_write[style] ||
         #(local_dest_path.blank? ?
