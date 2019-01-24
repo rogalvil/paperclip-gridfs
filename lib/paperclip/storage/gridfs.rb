@@ -46,7 +46,7 @@ module Paperclip
       end
 
       # Returns a binary representation of the data of the file assigned to the given style
-      def copy_to_local_file(style, local_dest_path)
+      def copy_to_local_file(style = default_style, local_dest_path = nil)
         #FileUtils.cp(path(style), local_dest_path)
         puts "copy_to_local_file\n"
         puts "style\n"
