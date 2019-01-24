@@ -65,7 +65,7 @@ module Paperclip
         (local_dest_path.blank? ?
           ::Paperclip::Tempfile.new(original_filename).tap do |tf|
             tf.binmode
-            tf.write(@gridfs[path(style)].data)
+            tf.write(@gridfs.open(path(style), 'r'))
             tf.close
           end
         :
