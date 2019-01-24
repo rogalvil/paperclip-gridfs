@@ -70,7 +70,7 @@ module Paperclip
           end
         :
         @file = File.open(path(style), 'wb')
-        @gridfs.open(original_filename, 'w') do |f|
+        @gridfs.open(original_filename, 'r') do |f|
           f.write @file
         end
         #::File.open(local_dest_path, 'wb').tap do |tf|
@@ -126,8 +126,16 @@ module Paperclip
       end
 
       def flush_writes #:nodoc:
+        puts "flush_writes\n"
+        puts "style\n #{style} \npath\n #{path} \n"
+
         @queued_for_write.each do |style, file|
+
+          puts ("path #{path(style)} #{style} \n"
+          puts ("file #{file}\n"
+
           log("saving #{path(style)}")
+
           @gridfs.open(path(style), 'w', :content_type => content_type) do |f|
             f.write file.read
           end
