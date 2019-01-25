@@ -46,7 +46,7 @@ module Paperclip
       end
 
       def local_file(style = default_style, local_dest_path = nil)
-        @queued_for_write[style] || (@gridfs.open(path(style), 'r').read if exists?(style))
+        @gridfs.open(path(style), 'r').read if exists?(style)
         #@gridfs.open("#{style}/#{original_filename}", 'r').read
       end
 
