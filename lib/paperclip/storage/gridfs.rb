@@ -65,21 +65,21 @@ module Paperclip
         (local_dest_path.blank? ?
           ::Paperclip::Tempfile.new(original_filename).tap do |tf|
             tf.binmode
-            tf.write(@gridfs.open("#{style}/#{original_filename}", 'r'))
+            tf.write(@gridfs.open("#{style}/#{original_filename}", 'r').read)
             tf.close
           end
         :
-        #@gridfs.open(path(style), 'r') do |f|
-        #  f.read
-        #end
-        ::File.open(local_dest_path, 'wb').tap do |tf|
-          begin
-            tf.write(@gridfs.open("#{style}/#{original_filename}", 'r'))
-          rescue
-            Rails.logger.info "[Paperclip] Failed reading #{path(style)}"
+          #@gridfs.open(path(style), 'r') do |f|
+          #  f.read
+          #end
+          ::File.open(local_dest_path, 'wb').tap do |tf|
+            begin
+              tf.write(@gridfs.open("#{style}/#{original_filename}", 'r').read)
+            rescue
+              Rails.logger.info "[Paperclip] Failed reading #{path(style)}"
+            end
+            tf.close
           end
-          tf.close
-        end
         )
       end
 
