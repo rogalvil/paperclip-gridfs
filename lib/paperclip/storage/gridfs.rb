@@ -46,6 +46,7 @@ module Paperclip
       end
 
       def local_file(style = default_style, local_dest_path = nil)
+        puts "#{style}/#{original_filename}"
         @gridfs.open("#{style}/#{original_filename}", 'r').read if exists?(style)
         #@gridfs.open("#{style}/#{original_filename}", 'r').read
       end
