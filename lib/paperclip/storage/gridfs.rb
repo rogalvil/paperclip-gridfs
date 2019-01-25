@@ -47,8 +47,9 @@ module Paperclip
 
       def local_file(style = default_style, local_dest_path = nil)
         puts "#{style}/#{original_filename}"
-        @gridfs.open("#{style}/#{original_filename}", 'r').read if exists?(style)
-        #@gridfs.open("#{style}/#{original_filename}", 'r').read
+        a = @gridfs.open("#{style}/#{original_filename}", 'r').read
+        puts a
+        a
       end
 
       # Returns a binary representation of the data of the file assigned to the given style
