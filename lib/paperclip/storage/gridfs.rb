@@ -94,69 +94,18 @@ module Paperclip
         )
       end
 
-      def copy_to_local_file2 style = default_style, local_dest_path = nil
-
-
-      #def to_file style = default_style
-        #@queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
-        @queued_for_write[style] ||
-        (local_dest_path.blank? ?
-          ::Paperclip::Tempfile.new(original_filename).tap do |tf|
-            tf.binmode
-            tf.write(@gridfs[path(style)].data)
-            tf.close
-          end
-        :
-        ::File.open(local_dest_path, 'wb').tap do |tf|
-          begin
-            tf.write(@gridfs[path(style)].data)
-          rescue
-            Rails.logger.info "[Paperclip] Failed reading #{path(style)}"
-          end
-          tf.close
-        end
-        )
-        #(@gridfs.open(local_dest_path, 'r'))
-        #@queued_for_write[style] ||
-        #(local_dest_path.blank? ?
-        #  ::Paperclip::Tempfile.new(original_filename).tap do |tf|
-        #    tf.binmode
-        #    tf.write(@gridfs[path(style)].data)
-        #    tf.close
-        #  end :
-        #  ::File.open(local_dest_path, 'wb').tap do |tf|
-        #    begin
-        #      tf.write(@gridfs[path(style)].data)
-        #    rescue
-        #      Rails.logger.info "[Paperclip] Failed reading #{path(style)}"
-        #    end
-        #    tf.close
-        #  end)
-
-      end
-
       def flush_writes #:nodoc:
         puts "flush_writes\n"
-
-
         @queued_for_write.each do |style, file|
           #FileUtils.mkdir_p(File.dirname(path(style)))
-
-
           #puts "style\n #{style} \npath\n #{path} \n"
-
           puts "path #{path(style)} \n"
           #puts "file #{file.inspect}\n"
           puts "original_filename #{original_filename}\n"
-
           log("saving #{path(style)}")
           begin
-
             #move_file(file.path, path(style))
-
             @file = File.open(file.path)
-
-
             @gridfs.open("#{style}/#{original_filename}", 'w', :content_type => content_type) do |f|
               puts "f #{f}\n"
               #f.write file.read
@@ -173,8 +122,8 @@ module Paperclip
 
       def flush_deletes #:nodoc:
         @queued_for_delete.each do |path|
-          log("deleting #{path}")
-          @gridfs.delete(path)
+          log("deleting #{path} #{style}/#{original_filename}")
+          @gridfs.delete("#{style}/#{original_filename}")
         end
         @queued_for_delete = []
       end
