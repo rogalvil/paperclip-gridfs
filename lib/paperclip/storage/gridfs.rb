@@ -46,7 +46,12 @@ module Paperclip
       end
 
       def local_file(style = default_style, local_dest_path = nil)
-        puts "#{style}/#{original_filename}"
+        puts "local_file\n"
+        puts "path\n"
+        puts path
+        puts "path(style)\n"
+        puts path(style)
+        puts "#{style}/#{original_filename}\n"
         a = @gridfs.open("#{style}/#{original_filename}", 'r').read
         puts a
         a
@@ -58,13 +63,12 @@ module Paperclip
         puts "copy_to_local_file\n"
         puts "style\n"
         puts style
-        puts "\npath\n"
-        puts path
-        puts "\nlocal_dest_path\n"
+
+        puts "local_dest_path\n"
         puts local_dest_path
-        puts "\noriginal_filename\n"
+        puts "original_filename\n"
         puts original_filename
-        puts "\n@gridfs\n"
+        puts "@gridfs\n"
         puts @gridfs
         puts "\n\n"
         #@queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
