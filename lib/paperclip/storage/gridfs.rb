@@ -147,7 +147,7 @@ module Paperclip
         puts "creds\n"
         puts creds.inspect
         return creds[:database] if creds[:database].is_a? Mongo::Database
-        db = Mongo::MongoClient.new(creds[:host], creds[:port]).db(creds[:database])
+        db = Mongo::Mongo::Client.new(creds[:host], creds[:port]).db(creds[:database])
         db.authenticate(creds[:username], creds[:password]) if creds[:username] && creds[:password]
         puts db
         return db
