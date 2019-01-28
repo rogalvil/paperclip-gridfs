@@ -47,13 +47,15 @@ module Paperclip
 
       def local_file(style = default_style, local_dest_path = nil)
         puts "local_file\n"
+        puts "style\n"
+        puts style
         puts "path\n"
         puts path
         puts "path(style)\n"
         puts path(style)
         puts "#{style}/#{original_filename}\n"
         a = @gridfs.open("#{style}/#{original_filename}", 'r').read
-        puts a
+        #puts a
         a
       end
 
@@ -63,7 +65,10 @@ module Paperclip
         puts "copy_to_local_file\n"
         puts "style\n"
         puts style
-
+        puts "path\n"
+        puts path
+        puts "path(style)\n"
+        puts path(style)
         puts "local_dest_path\n"
         puts local_dest_path
         puts "original_filename\n"
@@ -121,6 +126,14 @@ module Paperclip
       end
 
       def flush_deletes #:nodoc:
+        puts "flush_deletes\n"
+        puts "style\n"
+        puts style
+        puts "path\n"
+        puts path
+        puts "path(style)\n"
+        puts path(style)
+        puts "#{style}/#{original_filename}\n"
         @queued_for_delete.each do |path|
           log("deleting #{path} #{style}/#{original_filename}")
           @gridfs.delete("#{style}/#{original_filename}")
