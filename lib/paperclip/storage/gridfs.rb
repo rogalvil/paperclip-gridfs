@@ -27,7 +27,7 @@ module Paperclip
 
         base.instance_eval do
           @gridfs_connection = get_database_connection(parse_credentials(@options[:gridfs]))
-          @gridfs            = Mongo::GridFileSystem.new(@gridfs_connection)
+          @gridfs            = Mongo::Grid::File.new(@gridfs_connection)
         end
       end
 
