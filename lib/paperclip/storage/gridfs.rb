@@ -46,32 +46,11 @@ module Paperclip
       end
 
       def local_file(style = default_style, local_dest_path = nil)
-        puts "local_file\n"
-        puts "path\n"
-        puts path
-        puts "path(style)\n"
-        puts path(style)
-        puts "#{style}/#{original_filename}\n"
-        a = @gridfs.open("#{style}/#{original_filename}", 'r').read
-        puts a
-        a
+        @gridfs.open("#{style}/#{original_filename}", 'r').read
       end
 
       # Returns a binary representation of the data of the file assigned to the given style
       def copy_to_local_file(style = default_style, local_dest_path = nil)
-        #FileUtils.cp(path(style), local_dest_path)
-        puts "copy_to_local_file\n"
-        puts "style\n"
-        puts style
-
-        puts "local_dest_path\n"
-        puts local_dest_path
-        puts "original_filename\n"
-        puts original_filename
-        puts "@gridfs\n"
-        puts @gridfs
-        puts "\n\n"
-        #@queued_for_write[style] || (@gridfs.open(path(style), 'r') if exists?(style))
         @queued_for_write[style] ||
         (local_dest_path.blank? ?
           ::Paperclip::Tempfile.new(original_filename).tap do |tf|
@@ -80,9 +59,6 @@ module Paperclip
             tf.close
           end
         :
-          #@gridfs.open(path(style), 'r') do |f|
-          #  f.read
-          #end
           ::File.open(local_dest_path, 'wb').tap do |tf|
             begin
               tf.write(@gridfs.open("#{style}/#{original_filename}", 'r').read)
@@ -95,20 +71,12 @@ module Paperclip
       end
 
       def flush_writes #:nodoc:
-        puts "flush_writes\n"
         @queued_for_write.each do |style, file|
-          #FileUtils.mkdir_p(File.dirname(path(style)))
-          #puts "style\n #{style} \npath\n #{path} \n"
-          puts "path #{path(style)} \n"
-          #puts "file #{file.inspect}\n"
-          puts "original_filename #{original_filename}\n"
           log("saving #{path(style)}")
           begin
-            #move_file(file.path, path(style))
             @file = File.open(file.path)
             @gridfs.open("#{style}/#{original_filename}", 'w', :content_type => content_type) do |f|
               puts "f #{f}\n"
-              #f.write file.read
               f.write @file
             end
           rescue
@@ -122,7 +90,6 @@ module Paperclip
 
       def flush_deletes #:nodoc:
         @queued_for_delete.each do |path|
-          log("deleting #{path} #{style}/#{original_filename}")
           @gridfs.delete("#{style}/#{original_filename}")
         end
         @queued_for_delete = []
@@ -131,12 +98,9 @@ module Paperclip
       private
 
       def get_database_connection creds
-        puts "creds\n"
-        puts creds.inspect
         return creds[:database] if creds[:database].is_a? Mongo::DB
         db = Mongo::MongoClient.new(creds[:host], creds[:port]).db(creds[:database])
         db.authenticate(creds[:username], creds[:password]) if creds[:username] && creds[:password]
-        puts db
         return db
       end
 
