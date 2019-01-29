@@ -76,7 +76,6 @@ module Paperclip
           begin
             @file = File.open(file.path)
             @gridfs.open("#{style}/#{original_filename}", 'w', :content_type => content_type) do |f|
-              puts "f #{f}\n"
               f.write @file
             end
           rescue
