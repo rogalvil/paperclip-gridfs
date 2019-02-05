@@ -46,7 +46,7 @@ module Paperclip
       end
 
       def local_file(style = default_style, local_dest_path = nil)
-        @gridfs.open("#{style}/#{original_filename}", 'r').read
+        @gridfs.open("#{style}/#{original_filename}", 'r').read.force_encoding("UTF-8")
       end
 
       # Returns a binary representation of the data of the file assigned to the given style
